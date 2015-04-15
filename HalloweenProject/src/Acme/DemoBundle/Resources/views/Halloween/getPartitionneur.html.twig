@@ -1,0 +1,45 @@
+{% if hasEleves == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Options de partitionnement</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="divpadder">
+                    <div id="error"></div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Remplir les champs suivants</div>
+                            <div class="panel-body">
+                                <div class="row">
+                                    <div class="divpadder">
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td style="width:50%;"><label for="cardinal">Cardinal :</label></td>
+                                                <td style="width:50%;"><input type="text" class="form-control" id="cardinal" placeholder="Entrez le cardinal (clé de répartition)"></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2"><button type="submit" class="btn btn-default" style="width:100%;" onclick="Partitionneur('{{ idClasse }}');">Partitionner la classe</button></td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading">Eleves dans la classe</div>
+                                <div class="panel-body">
+                                    <div class="row">
+                                        <div class="divpadder"><center><strong>
+                                            {% for eleve in elevesClasse %}
+                                                {{ eleve.nom }} {{ eleve.prenom }}<br>
+                                            {% endfor %}
+                                        </strong></center></div>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+                                            
+<div id="divpartitionneur"></div>
+{% endif %}
+{% if hasEleves == "false" %}false{% endif %}

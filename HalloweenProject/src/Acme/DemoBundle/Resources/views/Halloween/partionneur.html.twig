@@ -1,0 +1,157 @@
+<div id="content">
+    <script src="{{ asset('bundles/acmedemo/js/generateurGroupe.js') }}"></script>  
+
+    <div class="panel panel-default">
+       <div class="panel-heading">Générateur de groupes</div>
+       <div class="panel-body">
+        <div class="row">
+          <div style="padding-left:1em;padding-right:1em;">
+       Cette application vous permet de générer aléatoirement des groupes de
+       travail (pour des devoirs par exemple)<br />
+       Veuillez vous connecter pour pouvoir sélectionner la classe à partitionner.
+          </div>
+        </div>
+       </div>
+    </div>
+
+<div id="content2">
+    <div class="panel panel-default">
+       <div class="panel-heading">Connexion</div>
+       <div class="panel-body">
+        <div class="row">
+            <center>
+                <div id="error"></div>
+                <table style="margin:auto;width:75%;">
+                    <tr>
+                        <td style="margin:auto;width:50%;">Nom d'utilisateur :<td>
+                        <td style="margin:auto;"><input class="form-control" type="text" name="user" id="user"><td>
+                    </tr>
+                    <tr>
+                        <td style="margin:auto;"> Mot de passe :<td>
+                        <td style="margin:auto;"><input class="form-control" type="password" name="pass" id="pass"><td>
+                    </tr>
+                    <tr>
+                        <td style="margin:auto;" colspan="3"><button type="submit" class="btn btn-default" style="width:100%;" onClick="loginPage();">Se connecter</button></td>
+                    </tr>
+                </table>
+            </center>
+        </div>
+       </div>
+    </div>
+</div>
+    
+    <script type="text/javascript">
+    function jsoncallback(objetJS) {
+    
+            textHTML = '<div class="panel panel-default">'
+        + '<div class="panel-heading">Classe partitionnée</div>'
+        + '<div class="panel-body">'
+        + '<div class="row">'
+        + '<div class="tableau">'
+        + '<table class="table table-bordered table-condensed table-center">'  ;
+        var nbGroupe = objetJS.length;
+       
+        for(i = 0; i < objetJS.length; i++)
+            {
+                    textHTML = textHTML+"<tr><td>";
+                            
+                            for(u = 0; u < objetJS[i].length; u++)
+                            {       
+                                   
+                                    textHTML = textHTML+objetJS[i][u].nom+" "+objetJS[i][u].prenom+"</br>" ;
+                                 
+                            }
+                             
+                    textHTML = textHTML+"</td></tr>" ;
+            }
+            
+            textHTML = textHTML+"</table></div></div></div></div>";
+      $("#divpartitionneur").html(textHTML);
+
+    }
+
+    function loginPage() {
+        $.ajax({
+		url : "login",
+		type : 'POST',
+		cache : false,
+		dataType : 'html',
+		data: { user: document.getElementById('user').value, pass: document.getElementById('pass').value },
+		success : function(html, statut) {
+                        if(html == "false")
+                        {
+                            document.getElementById('error').innerHTML = "Combinaison nom de compte/mot de passe inconnue !<br><br>";
+                        }
+                        else if(html == "noclasse")
+                        {
+                            document.getElementById('error').innerHTML = "Vous n'avez aucune classe pour pouvoir faire un partitionnemment !<br><br>";
+                        }
+                        else
+                        {
+                            document.getElementById('content2').innerHTML = html;
+                        }
+		}
+	});
+    }
+
+    function postPage($page) {
+            $.ajax({
+                    url : $page,
+                    type : 'POST',
+                    cache : false,
+                    dataType : 'json',
+                    data: { maxCardGroupe: document.getElementById('maxCardGroupe').value, liste: document.getElementById('liste').value },
+                    success : function(json, statut) {
+                            document.getElementById('panel').style = "visibility:visible;";
+                            jsoncallback(json);				
+                    }
+            })
+                     .done(function( msg )
+                    {
+                            document.getElementById('panel').style = "visibility:visible;";
+                    });
+    }
+    
+    function getPartitionneur($idClasse) {
+        $.ajax({
+		url : "getPartitionneur",
+		type : 'POST',
+		cache : false,
+		dataType : 'html',
+		data: { classe: $idClasse },
+		success : function(html, statut) {
+                    if(html == "false")
+                    {
+                        document.getElementById('error').innerHTML = "<center>Il n'y a pas d'élèves dans cette classe !</center><br>";
+                        document.getElementById('content3').innerHTML = "";
+                    }
+                    else
+                    {
+                        document.getElementById('content3').innerHTML = html;
+                        document.getElementById('error').innerHTML = "";
+                    }
+		}
+	});
+    }
+    
+    function Partitionneur($idClasse) {
+        if(document.getElementById('cardinal').value != "")
+        {
+            $.ajax({
+		url : "partitionneur",
+		type : 'POST',
+		cache : false,
+		dataType : 'json',
+		data: { classe: $idClasse, maxCardGroupe: document.getElementById('cardinal').value },
+		success : function(json, statut) {
+			jsoncallback(json);				
+		}
+            });
+        }
+        else
+        {
+            alert('Vous devez renseigner le cardinal !');
+        }
+    }
+    </script>
+</div>

@@ -1,0 +1,35 @@
+{% if isLogged == "true" %}
+    <div class="panel panel-default">
+        <div class="panel-heading">Liste des classes</div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="divpadder">
+                    <div id="error"></div>
+                    
+           {% for classe in classes %}
+               
+               {% if classe.eleves|length == 0 %}
+                    <div class="panel-heading">Classe : <strong>{{ classe.label }} (vide)</strong></div>
+              
+            {% else %}
+            <div class="panel-heading">Classe : <strong>{{ classe.label }} (Nombre d'élèves : {{ classe.eleves|length }})</strong></div>
+            {% endif %} 
+               
+                <div class="row">
+                    <div class="divpadder"><button type="submit" class="btn btn-default" style="width:100%;" onClick="getPartitionneur('{{ classe.id }}');">Sélectionner cette classe</button></div>
+                </div>
+            </div>
+        </div>
+            
+         {% endfor %}
+            
+        
+                </div>
+            </div>
+        </div>
+    </div>
+        
+<div id="content3"></div>
+{% endif %}
+{% if not isLogged %}false{% endif %}
+{% if hasClasse is defined %}noclasse{% endif %}

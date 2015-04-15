@@ -1,0 +1,13 @@
+body
+{
+    margin:auto;
+    font-size: 14px;
+    font-family: "Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
+}
+
+.divpadder
+{
+    width:100%;
+    padding-left:1em;
+    padding-right:1em;
+}
